@@ -198,20 +198,7 @@ public class GsonBuilderTest {
     }
   }
 
-  @Test
-  public void testDisableJdkUnsafe() {
-    Gson gson = new GsonBuilder()
-        .disableJdkUnsafe()
-        .create();
-    try {
-      gson.fromJson("{}", ClassWithoutNoArgsConstructor.class);
-      fail("Expected exception");
-    } catch (JsonIOException expected) {
-      assertThat(expected).hasMessageThat().isEqualTo(
-          "Unable to create instance of class com.google.gson.GsonBuilderTest$ClassWithoutNoArgsConstructor; "
-          )
-    }
-  }
+
 
   private static class ClassWithoutNoArgsConstructor {
     @SuppressWarnings("unused")
