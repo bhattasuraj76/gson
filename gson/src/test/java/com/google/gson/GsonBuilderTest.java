@@ -34,10 +34,13 @@ import org.junit.Test;
  */
 public class GsonBuilderTest {
   private static final TypeAdapter<Object> NULL_TYPE_ADAPTER = new TypeAdapter<Object>() {
-    @Override public void write(JsonWriter out, Object value) {
+    @Override
+    public void write(JsonWriter out, Object value) {
       throw new AssertionError();
     }
-    @Override public Object read(JsonReader in) {
+
+    @Override
+    public Object read(JsonReader in) {
       throw new AssertionError();
     }
   };
@@ -50,19 +53,22 @@ public class GsonBuilderTest {
     assertThat(builder.create()).isNotNull();
 
     builder.setFieldNamingStrategy(new FieldNamingStrategy() {
-      @Override public String translateName(Field f) {
+      @Override
+      public String translateName(Field f) {
         return "test";
       }
     });
 
     Gson otherGson = builder.create();
     assertThat(otherGson).isNotNull();
-    // Should be different instances because builder has been modified in the meantime
+    // Should be different instances because builder has been modified in the
+    // meantime
     assertThat(gson).isNotSameInstanceAs(otherGson);
   }
 
   /**
-   * Gson instances should not be affected by subsequent modification of GsonBuilder
+   * Gson instances should not be affected by subsequent modification of
+   * GsonBuilder
    * which created them.
    */
   @Test
@@ -72,25 +78,28 @@ public class GsonBuilderTest {
 
     // Modifications of `gsonBuilder` should not affect `gson` object
     gsonBuilder.registerTypeAdapter(CustomClass1.class, new TypeAdapter<CustomClass1>() {
-      @Override public CustomClass1 read(JsonReader in) {
+      @Override
+      public CustomClass1 read(JsonReader in) {
         throw new UnsupportedOperationException();
       }
 
-      @Override public void write(JsonWriter out, CustomClass1 value) throws IOException {
+      @Override
+      public void write(JsonWriter out, CustomClass1 value) throws IOException {
         out.value("custom-adapter");
       }
     });
     gsonBuilder.registerTypeHierarchyAdapter(CustomClass2.class, new JsonSerializer<CustomClass2>() {
-      @Override public JsonElement serialize(CustomClass2 src, Type typeOfSrc, JsonSerializationContext context) {
+      @Override
+      public JsonElement serialize(CustomClass2 src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive("custom-hierarchy-adapter");
       }
     });
     gsonBuilder.registerTypeAdapter(CustomClass3.class, new InstanceCreator<CustomClass3>() {
-      @Override public CustomClass3 createInstance(Type type) {
+      @Override
+      public CustomClass3 createInstance(Type type) {
         return new CustomClass3("custom-instance");
       }
     });
-
 
     assertDefaultGson(gson);
     // New GsonBuilder created from `gson` should not have been affected by changes
@@ -126,8 +135,12 @@ public class GsonBuilderTest {
     assertThat(customClass3.s).isEqualTo("custom-instance");
   }
 
-  static class CustomClass1 { }
-  static class CustomClass2 { }
+  static class CustomClass1 {
+  }
+
+  static class CustomClass2 {
+  }
+
   static class CustomClass3 {
     static final String NO_ARG_CONSTRUCTOR_VALUE = "default instance";
 
@@ -143,9 +156,9 @@ public class GsonBuilderTest {
   }
 
   @Test
-  public void testExcludeFieldsWithModifiers() {
+  public void testExcludeFields() {
     Gson gson = new GsonBuilder()
-        .excludeFieldsWithModifiers(Modifier.VOLATILE, Modifier.PRIVATE)
+        .excludeFields(Modifier.VOLATILE, Modifier.PRIVATE)
         .create();
     assertThat(gson.toJson(new HasModifiers())).isEqualTo("{\"d\":\"d\"}");
   }
@@ -196,8 +209,8 @@ public class GsonBuilderTest {
     } catch (JsonIOException expected) {
       assertThat(expected).hasMessageThat().isEqualTo(
           "Unable to create instance of class com.google.gson.GsonBuilderTest$ClassWithoutNoArgsConstructor; "
-          + "usage of JDK Unsafe is disabled. Registering an InstanceCreator or a TypeAdapter for this type, "
-          + "adding a no-args constructor, or enabling usage of JDK Unsafe may fix this problem.");
+              + "usage of JDK Unsafe is disabled. Registering an InstanceCreator or a TypeAdapter for this type, "
+              + "adding a no-args constructor, or enabling usage of JDK Unsafe may fix this problem.");
     }
   }
 
