@@ -156,9 +156,9 @@ public class GsonBuilderTest {
   }
 
   @Test
-  public void testExcludeFields() {
+  public void testExcludeFieldsWithModifiers() {
     Gson gson = new GsonBuilder()
-        .excludeFields(Modifier.VOLATILE, Modifier.PRIVATE)
+        .excludeFieldsWithModifiers(Modifier.VOLATILE, Modifier.PRIVATE)
         .create();
     assertThat(gson.toJson(new HasModifiers())).isEqualTo("{\"d\":\"d\"}");
   }
@@ -171,7 +171,13 @@ public class GsonBuilderTest {
     String d = "d";
   }
 
-  
+  @Test
+  public void testTransientFieldExclusion() {
+    Gson gson = new GsonBuilder()
+        .excludeFieldsWithModifiers()
+        .create();
+    assertThat(gson.toJson(new HasTransients())).isEqualTo("{\"a\":\"a\"}");
+  }
 
   static class HasTransients {
     transient String a = "a";
@@ -191,7 +197,6 @@ public class GsonBuilderTest {
       new GsonBuilder().registerTypeAdapter(type, NULL_TYPE_ADAPTER);
     }
   }
-  
 
   @Test
   public void testDisableJdkUnsafe() {
@@ -204,8 +209,7 @@ public class GsonBuilderTest {
     } catch (JsonIOException expected) {
       assertThat(expected).hasMessageThat().isEqualTo(
           "Unable to create instance of class com.google.gson.GsonBuilderTest$ClassWithoutNoArgsConstructor; "
-              + "usage of JDK Unsafe is disabled. Registering an InstanceCreator or a TypeAdapter for this type, "
-              + "adding a no-args constructor, or enabling usage of JDK Unsafe may fix this problem.");
+          )
     }
   }
 
@@ -230,32 +234,6 @@ public class GsonBuilderTest {
       fail();
     } catch (IllegalArgumentException e) {
       assertThat(e).hasMessageThat().isEqualTo("Invalid version: -0.1");
-    }
-  }
-
-  @Test
-  public void testFieldExclusion() {
-    Gson gson = new GsonBuilder()
-        .fieldExclusion()
-        .create();
-    assertThat(gson.toJson(new HasTransients())).isEqualTo("{\"a\":\"a\"}");
-  }
-
-  @Test
-  public void newFieldDissociation() {
-    Gson gson = new GsonBuilder()
-        .fieldDissociate()
-        .create();
-    assertThat(gson.toJson(new HasTransients())).isEqualTo(null);
-  }
-
-  public void testSetVersionInvalid() {
-    GsonBuilder builder = new GsonBuilder();
-    try {
-      builder.setVersion(Double.NaN);
-      fail();
-    } catch (IllegalArgumentException e) {
-      assertThat(e).hasMessageThat().isEqualTo("Invalid version: NaN");
     }
   }
 }

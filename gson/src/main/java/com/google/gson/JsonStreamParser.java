@@ -26,18 +26,22 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * A streaming parser that allows reading of multiple {@link JsonElement}s from the specified reader
+ * A streaming parser that allows reading of multiple {@link JsonElement}s from
+ * the specified reader
  * asynchronously. The JSON data is parsed in lenient mode, see also
  * {@link JsonReader#setLenient(boolean)}.
  *
- * <p>This class is conditionally thread-safe (see Item 70, Effective Java second edition). To
- * properly use this class across multiple threads, you will need to add some external
+ * <p>
+ * This class is conditionally thread-safe (see Item 70, Effective Java second
+ * edition). To
+ * properly use this class across multiple threads, you will need to add some
+ * external
  * synchronization. For example:
  * 
  * <pre>
  * JsonStreamParser parser = new JsonStreamParser("['first'] {'second':10} 'third'");
  * JsonElement element;
- * synchronized (parser) {  // synchronize on an object shared by threads
+ * synchronized (parser) { // synchronize on an object shared by threads
  *   if (parser.hasNext()) {
  *     element = parser.next();
  *   }
@@ -61,7 +65,8 @@ public final class JsonStreamParser implements Iterator<JsonElement> {
   }
 
   /**
-   * @param reader The data stream containing JSON elements concatenated to each other.
+   * @param reader The data stream containing JSON elements concatenated to each
+   *               other.
    * @since 1.4
    */
   public JsonStreamParser(Reader reader) {
@@ -75,7 +80,7 @@ public final class JsonStreamParser implements Iterator<JsonElement> {
    * {@link NoSuchElementException} if no element is available.
    *
    * @return the next available {@code JsonElement} on the reader.
-   * @throws JsonParseException if the incoming stream is malformed JSON.
+   * @throws JsonParseException     if the incoming stream is malformed JSON.
    * @throws NoSuchElementException if no {@code JsonElement} is available.
    * @since 1.4
    */
@@ -95,8 +100,11 @@ public final class JsonStreamParser implements Iterator<JsonElement> {
   }
 
   /**
-   * Returns true if a {@link JsonElement} is available on the input for consumption
-   * @return true if a {@link JsonElement} is available on the input, false otherwise
+   * Returns true if a {@link JsonElement} is available on the input for
+   * consumption
+   * 
+   * @return true if a {@link JsonElement} is available on the input, false
+   *         otherwise
    * @throws JsonParseException if the incoming stream is malformed JSON.
    * @since 1.4
    */
@@ -114,8 +122,10 @@ public final class JsonStreamParser implements Iterator<JsonElement> {
   }
 
   /**
-   * This optional {@link Iterator} method is not relevant for stream parsing and hence is not
+   * This optional {@link Iterator} method is not relevant for stream parsing and
+   * hence is not
    * implemented.
+   * 
    * @since 1.4
    */
   @Override

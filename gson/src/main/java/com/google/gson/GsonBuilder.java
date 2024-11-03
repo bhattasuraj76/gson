@@ -935,10 +935,7 @@ public final class GsonBuilder {
    *         "Builder" pattern
    * @since 2.9.0
    */
-  public GsonBuilder disableJdkUnsafe() {
-    this.useJdkUnsafe = false;
-    return this;
-  }
+
 
   /**
    * Adds a reflection access filter. A reflection access filter prevents Gson
