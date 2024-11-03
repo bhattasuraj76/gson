@@ -157,10 +157,5 @@ public class GsonTypeAdapterTest {
     assertThat(gson.toJson(instance, instanceType)).isEqualTo(expected);
   }
 
-  @Test
-  public void testTypeAdapterDoesNotAffectNonAdaptedTypes() {
-    String expected = "blah";
-    String actual = gson.toJson(expected);
-    assertThat(actual).isEqualTo("\"" + expected + "\"");
-  }
+
 }

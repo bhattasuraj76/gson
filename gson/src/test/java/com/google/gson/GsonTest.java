@@ -17,9 +17,13 @@
 package com.google.gson;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import com.google.gson.Gson.FutureTypeAdapter;
+import com.google.gson.GsonBuilderTest.CustomClass1;
+import com.google.gson.GsonBuilderTest.CustomClass2;
+import com.google.gson.GsonBuilderTest.CustomClass3;
 import com.google.gson.internal.Excluder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -490,5 +494,12 @@ public final class GsonTest {
     public CustomClass3() {
       this(NO_ARG_CONSTRUCTOR_VALUE);
     }
+  }
+
+  @Test
+  public void testTypeAdapterDoesNotAffectNonAdaptedTypes() {
+    String expected = "blah";
+    String actual = gson.toJson(expected);
+    assertThat(actual).isEqualTo("\"" + expected + "\"");
   }
 }
