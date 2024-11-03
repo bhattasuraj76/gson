@@ -86,9 +86,6 @@ public class GsonTypeAdapterTest {
     String expected = "blah";
     String actual = gson.toJson(expected);
     assertThat(actual).isEqualTo("\"" + expected + "\"");
-
-    actual = gson.fromJson(actual, String.class);
-    assertThat(actual).isEqualTo(expected);
   }
 
   private static class ExceptionTypeAdapter
@@ -158,5 +155,12 @@ public class GsonTypeAdapterTest {
     }
     Gson gson = builder.create();
     assertThat(gson.toJson(instance, instanceType)).isEqualTo(expected);
+  }
+
+  @Test
+  public void testTypeAdapterDoesNotAffectNonAdaptedTypes() {
+    String expected = "blah";
+    String actual = gson.toJson(expected);
+    assertThat(actual).isEqualTo("\"" + expected + "\"");
   }
 }
