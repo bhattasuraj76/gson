@@ -171,13 +171,7 @@ public class GsonBuilderTest {
     String d = "d";
   }
 
-  @Test
-  public void testTransientFieldExclusion() {
-    Gson gson = new GsonBuilder()
-        .excludeFieldsWithModifiers()
-        .create();
-    assertThat(gson.toJson(new HasTransients())).isEqualTo("{\"a\":\"a\"}");
-  }
+  
 
   static class HasTransients {
     transient String a = "a";
@@ -197,6 +191,7 @@ public class GsonBuilderTest {
       new GsonBuilder().registerTypeAdapter(type, NULL_TYPE_ADAPTER);
     }
   }
+  
 
   @Test
   public void testDisableJdkUnsafe() {
@@ -236,5 +231,13 @@ public class GsonBuilderTest {
     } catch (IllegalArgumentException e) {
       assertThat(e).hasMessageThat().isEqualTo("Invalid version: -0.1");
     }
+  }
+
+  @Test
+  public void testFieldExclusion() {
+    Gson gson = new GsonBuilder()
+        .fieldExclusion()
+        .create();
+    assertThat(gson.toJson(new HasTransients())).isEqualTo("{\"a\":\"a\"}");
   }
 }
