@@ -240,4 +240,22 @@ public class GsonBuilderTest {
         .create();
     assertThat(gson.toJson(new HasTransients())).isEqualTo("{\"a\":\"a\"}");
   }
+
+  @Test
+  public void newFieldDissociation() {
+    Gson gson = new GsonBuilder()
+        .fieldDissociate()
+        .create();
+    assertThat(gson.toJson(new HasTransients())).isEqualTo(null);
+  }
+
+  public void testSetVersionInvalid() {
+    GsonBuilder builder = new GsonBuilder();
+    try {
+      builder.setVersion(Double.NaN);
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertThat(e).hasMessageThat().isEqualTo("Invalid version: NaN");
+    }
+  }
 }
